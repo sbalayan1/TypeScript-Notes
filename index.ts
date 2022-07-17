@@ -228,25 +228,37 @@ steph.sayHi() //=> Hello, Steph Curry
 
 //imported from typescript documentation
 
-//takes 
+//takes two arguments, first the base class and second the mix-in classes as an array. 
 function applyMixins(derivedCtor: any, baseCtors: any[]) {
+
+    //iterate over the array of mixins. 
     baseCtors.forEach((baseCtor) => {
+        //iterate over the mixins properties (including the class's constructor and methods)
       Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
-        console.log(name, derivedCtor, baseCtor)
+        console.log('Before', name, derivedCtor.prototype)
+
         derivedCtor.prototype[name] = baseCtor.prototype[name]
+
+        console.log('After', name, derivedCtor.prototype, baseCtor.prototype[name])
       });
     });
 }
 
-// function applyMixins(derivedCtor: any, constructors: any[]) {
-//     constructors.forEach((baseCtor) => {
+// function applyMixins(derivedCtor: any, baseCtors: any[]) {
+//     baseCtors.forEach((baseCtor) => {
 //       Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
+
+//         console.log('Before', name, derivedCtor.prototype[name], baseCtor.prototype[name])
+
 //         Object.defineProperty(
-//           derivedCtor.prototype,
-//           name,
-//           Object.getOwnPropertyDescriptor(baseCtor.prototype, name) ||
+//             derivedCtor.prototype,
+//             name,
+//             Object.getOwnPropertyDescriptor(baseCtor.prototype, name) ||
 //             Object.create(null)
 //         );
+
+        
+//         console.log('After', name, derivedCtor.prototype[name], baseCtor.prototype[name])
 //       });
 //     });
 // }
@@ -278,9 +290,12 @@ class SuperHeroTest implements CanSayHi, HasSuperPower {
     }
 
     //in this case, we have two methods, sayHi() and superpower(), both of which return strings
+
     sayHi: () => string;
     superpower: () => string
+
 }
+
 
 // final step is to call the applyMixins function with the base class as the first argument and the mixed in classes as the second argument
 
