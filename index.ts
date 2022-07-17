@@ -115,3 +115,179 @@ class Observable<T> {
 let x: Observable<number>;
 let y: Observable<Person>;
 let z = new Observable(23); //does the same as the above, but instead implicitly sets the internal type to a number.
+
+
+class Emoji {
+    constructor(public icon) {
+        this.icon = icon
+    }
+}
+
+const sun = new Emoji('😆')
+console.log(sun)
+
+var Emoji2 = (function() {
+    function Emoji2(value) {
+        this.value = value
+    }
+
+    return Emoji
+}())
+
+class Emoji3 {
+    //create a private property called previous
+    private _prev;
+
+    constructor(private _icon) {
+        this._icon = _icon
+    }
+
+    get icon() {
+        return this._icon
+    }
+
+    //getter method to retrive that value
+    get prev() {
+        return this._prev
+    }
+
+    //mutates the icon value on the instance
+    change(val) {
+
+        //changes the previous value to the current icon. 
+        this._prev = this._icon
+
+        //changes the current icon to the change value.
+        this._icon = val
+    }
+}
+
+const emojiState = new Emoji3('😀')
+console.log(emojiState.icon, emojiState.prev) //😀 undefined
+
+emojiState.change('😁')
+emojiState.change('😅')
+
+console.log(emojiState.icon, emojiState.prev) // 😅 😁
+
+console.log('this was transpiled')
+
+//static methods
+//static methods are on the class itself and are not methods on an instance of the class
+
+class Emoji4 {
+
+    //define a static method that adds 1 to the input argument
+    static addOneTo(val) {
+        return val + 1
+    }
+}
+
+Emoji4.addOneTo(3)
+
+//inheritance
+class Human {
+    constructor(public name){}
+
+    sayHi() {
+        return `Hello ${this.name}`
+    }
+}
+
+const patrick = new Human('Patrick Mullot')
+console.log(patrick.sayHi()) //=> Hello, Patrick Mullot
+
+//assume we have other objects in our program that are similar to the human but need to implement other features based on what they were designed to do
+
+//here the SuperHuman class inherits all of the Human class's functionality
+class SuperHuman extends Human {
+    heroName;
+    //since there's an argument in the Human constructor, we need to do the same for the SH constructor
+    constructor(name) {
+        //super executes the code in the constructor of the parent class
+        super(name)
+        this.heroName = `Hero ${name}`
+    }
+
+    superpower() {
+        return `${this.heroName} says hello world`
+    }
+}
+
+const steph = new SuperHuman('Steph Curry')
+steph.superpower() //=> Hero Steph Curry says hello world
+steph.sayHi() //=> Hello, Steph Curry
+
+
+//composition
+//cocatenating objects together
+//decouple properties or behaviors into objects or functions that return objects. Then merge all the objects together into a final function 
+// usually referred to as mix-in pattern
+
+//typescript gives us the flexibility to use mix-ins in a class based format
+
+//imported from typescript documentation
+
+//takes 
+function applyMixins(derivedCtor: any, baseCtors: any[]) {
+    baseCtors.forEach((baseCtor) => {
+      Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
+        console.log(name, derivedCtor, baseCtor)
+        derivedCtor.prototype[name] = baseCtor.prototype[name]
+      });
+    });
+}
+
+// function applyMixins(derivedCtor: any, constructors: any[]) {
+//     constructors.forEach((baseCtor) => {
+//       Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
+//         Object.defineProperty(
+//           derivedCtor.prototype,
+//           name,
+//           Object.getOwnPropertyDescriptor(baseCtor.prototype, name) ||
+//             Object.create(null)
+//         );
+//       });
+//     });
+// }
+
+//create small behavior classes that define individual behaviors. These classes are concerned with what something does instead of what something is  
+class CanSayHi {
+    name;
+    sayHi() {
+        return `Hello, ${this.name}`
+    }
+}
+
+class HasSuperPower {
+    heroName;
+    superpower() {
+        return `${this.heroName} says hello world`
+    }
+}
+
+//different from inheritance above, we instead implement multiple classes. When we implement something we are only concerned with its interface and not its underlying code
+
+//the applyMixins function takes these interfaces and applies their code to this class
+//note applyMixins leaves us some extra boilerplate code where have to type the return values on the methods for this class
+class SuperHeroTest implements CanSayHi, HasSuperPower {
+    heroName;
+
+    constructor(public name) {
+        this.heroName = `Super ${name}`;
+    }
+
+    //in this case, we have two methods, sayHi() and superpower(), both of which return strings
+    sayHi: () => string;
+    superpower: () => string
+}
+
+// final step is to call the applyMixins function with the base class as the first argument and the mixed in classes as the second argument
+
+applyMixins(SuperHeroTest, [CanSayHi, HasSuperPower])
+
+const ts = new SuperHeroTest('TypeScript')
+console.log(ts)
+console.log(ts.sayHi())
+
+
