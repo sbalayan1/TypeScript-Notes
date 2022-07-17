@@ -1,8 +1,14 @@
 import * as _ from 'lodash'
 
 async function hello() {
-    console.log('hello world')
+    return 'hello world'
 }
+
+async function test2() {
+    console.log('hello world')
+    return 'test2'
+}
+test2()
 
 let lucky: any = 23
 lucky = '23'
