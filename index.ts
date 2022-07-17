@@ -235,11 +235,9 @@ function applyMixins(derivedCtor: any, baseCtors: any[]) {
     baseCtors.forEach((baseCtor) => {
         //iterate over the mixins properties (including the class's constructor and methods)
       Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
-        console.log('Before', name, derivedCtor.prototype)
 
         derivedCtor.prototype[name] = baseCtor.prototype[name]
 
-        console.log('After', name, derivedCtor.prototype, baseCtor.prototype[name])
       });
     });
 }

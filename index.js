@@ -217,12 +217,13 @@ steph.sayHi(); //=> Hello, Steph Curry
 // usually referred to as mix-in pattern
 //typescript gives us the flexibility to use mix-ins in a class based format
 //imported from typescript documentation
+//takes two arguments, first the base class and second the mix-in classes as an array. 
 function applyMixins(derivedCtor, baseCtors) {
+    //iterate over the array of mixins. 
     baseCtors.forEach(function (baseCtor) {
+        //iterate over the mixins properties (including the class's constructor and methods)
         Object.getOwnPropertyNames(baseCtor.prototype).forEach(function (name) {
-            console.log('Before', name, derivedCtor.prototype);
             derivedCtor.prototype[name] = baseCtor.prototype[name];
-            console.log('After', name, derivedCtor.prototype, baseCtor.prototype[name]);
         });
     });
 }
