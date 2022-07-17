@@ -233,9 +233,13 @@ function applyMixins(derivedCtor: any, baseCtors: any[]) {
 
     //iterate over the array of mixins. 
     baseCtors.forEach((baseCtor) => {
-        //iterate over the mixins properties (including the class's constructor and methods)
-      Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
+        //iterate over the mixin's properties (including the class's constructor and methods)
 
+        console.log(baseCtor.prototype)
+        //we iterate over the baseCtor's prototype because its properties are in the prototype object
+      Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
+        //name represents each property of the current mixin class
+        //derivedCtor.prototype[name] creates a new key within the base class's prototype. 
         derivedCtor.prototype[name] = baseCtor.prototype[name]
 
       });
@@ -302,5 +306,6 @@ applyMixins(SuperHeroTest, [CanSayHi, HasSuperPower])
 const ts = new SuperHeroTest('TypeScript')
 console.log(ts)
 console.log(ts.sayHi())
+console.log(ts.superpower())
 
 
