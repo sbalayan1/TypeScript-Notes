@@ -363,3 +363,72 @@ const myUserAccount = jsonParserUnknown(`{'name': 'Samuel'}`) as UserUnknown
 myUserAccount.name
 
 //what does as do?
+
+
+//Two main tools to declare shapes of an object: Interfaces and Types
+
+type Bird = {
+    wings: 2
+}
+
+interface BirdInterface {
+    wings: 2
+}
+
+const bird1: Bird = {wings: 2}
+const bird2: BirdInterface = {wings:2}
+
+//Types and interfaces can be intermixed
+const bird3: BirdInterface = bird1
+
+//Both can also extend other interfaces and types
+//Types do this via intersection types
+//interfaces have a keyword
+
+type Owl = {nocturnal: true} & Bird
+type Robin = {nocturnal: false} & BirdInterface
+
+interface Peacock extends Bird {
+    colorful: true;
+    flies: false
+}
+
+interface Chicken extends BirdInterface {
+    colorful: false;
+    flies: false
+}
+
+const owl: Owl = {
+    wings: 2, 
+    nocturnal: true
+}
+
+const chicken: Chicken = {
+    wings: 2,
+    colorful: false,
+    flies: false
+}
+
+// That said, we recommend you use interfaces over type aliases. Specifically, because you will get better error messages. 
+
+//Differences between interfaces and types
+//interfaces are open and types are closed. This means you can extend interfaces by declaring it a second time. Types oppositely, can't be changed outside of its declaration.
+
+interface Kitten {
+    purrs: boolean
+}
+
+interface Kitten {
+    color: string
+}
+
+type Puppy = {
+    color: string
+}
+
+// type Puppy = {
+//     toys: number
+// }
+
+
+
