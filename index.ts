@@ -1,4 +1,26 @@
 import * as _ from 'lodash'
+import { zipWith } from 'lodash'
+
+//Primitive Data Types in JavaScript
+/*
+    - String
+    - Number 
+    - Null
+    - Undefined
+    - Symbol
+    - Boolean
+    - BigInt
+*/
+//Data Types extended from TypeScript
+/*
+    - any: allow anything
+    - unknown: ensures a type is declared
+    - never: not possible this type could happen
+    - void: used to tell TypeScript that a function returns undefined or no return value
+*/
+
+
+//syntaxes for building types: Interfaces and Types
 
 async function hello() {
     return 'hello world'
@@ -15,12 +37,12 @@ lucky = '23'
 
 
 //example of creating custom types
-// type Style = string
-// let font: Style;
+type Style1 = string
+let font1: Style1;
 
 //the below is called a union type
-type Style = 'bold' | 'italic' | 23;
-let font: Style = 'bold'
+type Style2 = 'bold' | 'italic' | 23;
+let font2: Style2 = 'bold'
 
 //notice how now, font is only assignable to either bold, italic, or 23
 // font = 'something'
@@ -309,3 +331,35 @@ console.log(ts.sayHi())
 console.log(ts.superpower())
 
 
+//using interface declarations with classes
+interface User {
+    name: string;
+    id: number;
+}
+
+class UserAccount {
+    name: string;
+    id: number;
+
+    constructor(name: string, id: number) {
+        this.name = name
+        this.id = id
+    }
+}
+
+const user: User = new UserAccount('Sean', 1)
+
+//example of a use case for unknown
+const jsonParserUnknown = (jsonString: string): unknown => JSON.parse(jsonString)
+
+const myOtherAccount = jsonParserUnknown(`{'name': 'Samuel'}`)
+
+// myOtherAccount.name
+//myOtherAccount can't be used until its type has been declared.
+
+type UserUnknown = {name: string}
+const myUserAccount = jsonParserUnknown(`{'name': 'Samuel'}`) as UserUnknown
+
+myUserAccount.name
+
+//what does as do?
