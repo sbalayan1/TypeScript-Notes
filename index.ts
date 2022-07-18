@@ -123,21 +123,6 @@ type MyList2 = [number?, string?, boolean?]
 const arr4: MyList2 = []
 
 
-//Generics
-//generally used in situations when you want to use a Type interally inside of a class or function
-
-class Observable<T> {
-    constructor(public value: T) {
-
-    }
-}
-//T represents a variable type that we can pass in to strong type the class's internal value
-//This allows us to specify the internal type at some later point in our code 
-
-let x: Observable<number>;
-let y: Observable<Person>;
-let z = new Observable(23); //does the same as the above, but instead implicitly sets the internal type to a number.
-
 
 class Emoji {
     constructor(public icon) {
@@ -362,73 +347,108 @@ const myUserAccount = jsonParserUnknown(`{'name': 'Samuel'}`) as UserUnknown
 
 myUserAccount.name
 
-//what does as do?
+//what does AS do?
 
 
 //Two main tools to declare shapes of an object: Interfaces and Types
 
-type Bird = {
-    wings: 2
-}
+    type Bird = {
+        wings: 2
+    }
 
-interface BirdInterface {
-    wings: 2
-}
+    interface BirdInterface {
+        wings: 2
+    }
 
-const bird1: Bird = {wings: 2}
-const bird2: BirdInterface = {wings:2}
+    const bird1: Bird = {wings: 2}
+    const bird2: BirdInterface = {wings:2}
 
-//Types and interfaces can be intermixed
-const bird3: BirdInterface = bird1
+    //Types and interfaces can be intermixed
+    const bird3: BirdInterface = bird1
 
-//Both can also extend other interfaces and types
-//Types do this via intersection types
-//interfaces have a keyword
+    //Both can also extend other interfaces and types. Types do this via intersection types. Interfaces have a keyword
 
-type Owl = {nocturnal: true} & Bird
-type Robin = {nocturnal: false} & BirdInterface
+    type Owl = {nocturnal: true} & Bird
+    type Robin = {nocturnal: false} & BirdInterface
 
-interface Peacock extends Bird {
-    colorful: true;
-    flies: false
-}
+    interface Peacock extends Bird {
+        colorful: true;
+        flies: false
+    }
 
-interface Chicken extends BirdInterface {
-    colorful: false;
-    flies: false
-}
+    interface Chicken extends BirdInterface {
+        colorful: false;
+        flies: false
+    }
 
-const owl: Owl = {
-    wings: 2, 
-    nocturnal: true
-}
+    const owl: Owl = {
+        wings: 2, 
+        nocturnal: true
+    }
 
-const chicken: Chicken = {
-    wings: 2,
-    colorful: false,
-    flies: false
-}
+    const chicken: Chicken = {
+        wings: 2,
+        colorful: false,
+        flies: false
+    }
 
-// That said, we recommend you use interfaces over type aliases. Specifically, because you will get better error messages. 
+    //Use interfaces over type aliases because you will get better error messages. 
 
 //Differences between interfaces and types
-//interfaces are open and types are closed. This means you can extend interfaces by declaring it a second time. Types oppositely, can't be changed outside of its declaration.
+    //interfaces are open and types are closed. This means you can extend interfaces by declaring it a second time. Types oppositely, can't be changed outside of its declaration.
 
-interface Kitten {
-    purrs: boolean
-}
+        interface Kitten {
+            purrs: boolean
+        }
 
-interface Kitten {
-    color: string
-}
+        interface Kitten {
+            color: string
+        }
 
-type Puppy = {
-    color: string
-}
+        type Puppy = {
+            color: string
+        }
 
-// type Puppy = {
-//     toys: number
-// }
+        // type Puppy = {
+        //     toys: number
+        // }
+
+//Composing Types
+    //Complex types are created by combining simple ones using unions and generics
+
+    //Unions: with unions, you can declare that a type will be one of many types. 
+
+        type CustBoolean = true | false
+
+        //A popular use case for Unions is to describe what set of String or Numbers a value is allowed to be.
+        type WindowStates = 'open' | 'closed' | 'minimized'
+
+        //notice how the below doesn't work
+        //let windowOpen: WindowStates = 'broken'
+
+        let windowOpen: WindowStates = 'open'
+
+        //You can even use unions to handle different types. Imagine if you have a function that takes an array or a string as an argument. 
+
+        //the function below takes an object as an argument who's type can either be a string or an array
+        function getLength(obj: string | string[]) {
+            return obj.length
+        }
+    
+    //Generics
+        //generally used in situations when you want to use a Type interally inside of a class or function
+
+        class Observable<T> {
+            constructor(public value: T) {
+
+            }
+        }
+        
+        //T represents a variable type that we can pass in to strong type the class's internal value. This allows us to specify the internal type at some later point in our code 
+
+        let x: Observable<number>;
+        let y: Observable<Person>;
+        let z = new Observable(23); //does the same as the above, but instead implicitly sets the internal type to a number.
 
 
 
