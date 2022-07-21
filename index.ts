@@ -489,3 +489,23 @@ myUserAccount.name
 
 
 //Sturctural Type System
+    //Duck Typing or Structural typing is where type checking focuses on the shape that values have. If two objects have the same shape, typescript considers the two to have the same type. 
+
+    //the below defines a type whose properties are x and y. 
+    interface Point {
+        x: number;
+        y: number
+    }
+
+    //the below defines a function logPoint with parameter p whose type is a Point and console logs parameter p's properties
+    function logPoint(p: Point) {
+        console.log(`${p.x}, ${p.y}`)
+    }
+
+    let point = {x: 23, y: 24}
+    logPoint(point)
+    //the above logs "23, 24"
+
+    //Although point's type is never declared, typescript compares the shapes of Point and point in the type-check. Since they have the same shape, point's type is inferred to Point. 
+
+    //What's more interesting is that shape-matching only requires a subset of the object's fields to match. See the example below
