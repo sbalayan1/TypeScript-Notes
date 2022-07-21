@@ -334,19 +334,26 @@ var z = new Observable(23); //does the same as the above, but instead implicitly
 //const testObjectArray: ObjectWithNameArray = [{name:23}]
 //But this does work
 var testObjectArray = [{ name: "james brown" }];
-//declare let's us declare backpack without initializing its value.
-//the below creates a variable called backpack whose type is an object with data.
-//This line is a shortcut to tell TypeScript there is a constant called `backpack`, and to not worry about where it came from.
-//why doesn't this line of code work? 
-//declare const backpack: Backpack<{data: number}>
-var backpack;
+//you'll notice however that you run into this error when trying to use the above^
+//"Initializers are not allowed in ambient contexts"
+//The below is a way to work around the above. Here we declare a variable called backpack2 whose type is an object. Afterwards, we assign an object whose shape matches the Backpack interface. In a way the Backpack interface works similar to a class where backpack2 is an instance of the Backpack class and must come with all of the properties and methods of the Backpack class. 
+var backpack2;
+backpack2 = {
+    add: function () { return undefined; },
+    get: function () {
+        return { data: 25 };
+    }
+};
 var object = backpack.get();
 backpack.add({ data: 25 });
-console.log(object);
-//we can bypass the above by using the let keyword. the below creates a backpack2 variable whose class is a Backpack and type is a string?
-var backpack2;
+console.log("Generic backpack2", object);
+var backpack3;
+backpack3 = {
+    add: function () { return undefined; },
+    get: function () { return "hello world"; }
+};
 console.log(backpack.get());
-console.log(backpack2.add("Hello World"));
+console.log("Generic backpack3", backpack3.add("Hello World"));
 //the below defines a function logPoint with parameter p whose type is a Point and console logs parameter p's properties
 function logPoint(p) {
     console.log("".concat(p.x, ", ").concat(p.y));
@@ -370,4 +377,4 @@ var PointClass = /** @class */ (function () {
     return PointClass;
 }());
 var point4 = new PointClass("23", 24);
-logPoint(point4); //why does this work? 
+logPoint(point4); //why does this work?

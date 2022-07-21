@@ -477,23 +477,33 @@ const jsonParserUnknown = (jsonString: string): unknown => JSON.parse(jsonString
             get: () => Type;
         }
 
-        //declare let's us declare backpack without initializing its value.
-        //the below creates a variable called backpack whose type is an object with data.
-        //This line is a shortcut to tell TypeScript there is a constant called `backpack`, and to not worry about where it came from.
+        //declare let's us declare backpack without initializing its value. the below creates a variable called backpack whose type is an object with a data property. The object's data property is a number This line is a shortcut to tell TypeScript there is a constant called `backpack`, and to not worry about where it came from.
 
-        //why doesn't this line of code work? 
-            //declare const backpack: Backpack<{data: number}>
+            declare const backpack: Backpack<{data: number}>
+            //you'll notice however that you run into this error when trying to use the above^
+            //"Initializers are not allowed in ambient contexts"
+        
+            //The below is a way to work around the above. Here we declare a variable called backpack2 whose type is an object. Afterwards, we assign an object whose shape matches the Backpack interface. In a way the Backpack interface works similar to a class where backpack2 is an instance of the Backpack class and must come with all of the properties and methods of the Backpack class. 
+            let backpack2: Backpack<{data: number}>
+            backpack2 = {
+                add: () => undefined, 
+                get: () => {
+                    return {data: 25}
+                }
+            }
 
-        let backpack: Backpack<{data: number}>
-        backpack.add({data: 25})
-        const object = backpack.get()
-        console.log(object)
+            const object = backpack2.get()
+            backpack2.add({data: 25})
+            console.log("Generic backpack2", object)
 
-        //we can bypass the above by using the let keyword. the below creates a backpack2 variable whose class is a Backpack and type is a string?
-        let backpack2: Backpack<string>
+            let backpack3: Backpack<string>
+            backpack3 = {    
+                add: () => undefined,
+                get: () => "hello world"
+            }
 
-        console.log(backpack.get())
-        console.log(backpack2.add("Hello World"))
+            console.log(backpack3.get())
+            console.log("Generic backpack3", backpack3.add("Hello World"))
 
 
 //Sturctural Type System
@@ -538,4 +548,6 @@ const jsonParserUnknown = (jsonString: string): unknown => JSON.parse(jsonString
     }
 
     let point4 = new PointClass("23", 24)
-    logPoint(point4) //why does this work? 
+    logPoint(point4) //why does this work?
+    
+    
