@@ -339,15 +339,16 @@ const user: User = new UserAccount('Sean', 1)
 //example of a use case for unknown
 const jsonParserUnknown = (jsonString: string): unknown => JSON.parse(jsonString)
 
-const myOtherAccount = jsonParserUnknown(`{'name': 'Samuel'}`)
+   // myOtherAccount.name
+    //myOtherAccount can't be used until its type has been declared.
 
-// myOtherAccount.name
-//myOtherAccount can't be used until its type has been declared.
+//const myOtherAccount = jsonParserUnknown(`{'name': 'Samuel'}`)
 
-type UserUnknown = {name: string}
-const myUserAccount = jsonParserUnknown(`{'name': 'Samuel'}`) as UserUnknown
+//below commented out to fix bypass bug
+    // type UserUnknown = {name: string}
+    // const myUserAccount = jsonParserUnknown(`{'name': 'Samuel'}`) as UserUnknown
 
-myUserAccount.name
+    // myUserAccount.name
 
 //what does AS do?
 
@@ -473,16 +474,23 @@ myUserAccount.name
 
         interface Backpack<Type> {
             add: (obj: Type) => void;
-            get: () => void;
+            get: () => Type;
         }
 
         //declare let's us declare backpack without initializing its value.
         //the below creates a variable called backpack whose type is an object with data.
-        declare const backpack: Backpack<{data: Backpack<number>}>
+        //This line is a shortcut to tell TypeScript there is a constant called `backpack`, and to not worry about where it came from.
+
+        //why doesn't this line of code work? 
+            //declare const backpack: Backpack<{data: number}>
+
+        let backpack: Backpack<{data: number}>
+        backpack.add({data: 25})
+        const object = backpack.get()
+        console.log(object)
 
         //we can bypass the above by using the let keyword. the below creates a backpack2 variable whose class is a Backpack and type is a string?
         let backpack2: Backpack<string>
-
 
         console.log(backpack.get())
         console.log(backpack2.add("Hello World"))
@@ -509,3 +517,25 @@ myUserAccount.name
     //Although point's type is never declared, typescript compares the shapes of Point and point in the type-check. Since they have the same shape, point's type is inferred to Point. 
 
     //What's more interesting is that shape-matching only requires a subset of the object's fields to match. See the example below
+
+    let point2 = {x: 23, y: 24, z: 25}
+    logPoint(point2) //=> "23, 24"
+
+    let point3 = {x:23}
+    //logPoint(point3) // => doesn't work because point3 is missing property y. 
+
+
+    //Classes also conform to ducktyping
+    class PointClass {
+        x;
+        y;
+
+        //types are necessary in the constructor to strongly type the instances properties. without the types, the property types are inferred 
+        constructor(x, y) {
+            this.x = x
+            this.y = y
+        }
+    }
+
+    let point4 = new PointClass("23", 24)
+    logPoint(point4) //why does this work? 

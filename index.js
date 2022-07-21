@@ -51,6 +51,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+//Primitive Data Types in JavaScript
+/*
+    - String
+    - Number
+    - Null
+    - Undefined
+    - Symbol
+    - Boolean
+    - BigInt
+*/
+//Data Types extended from TypeScript
+/*
+    - any: allow anything
+    - unknown: ensures a type is declared
+    - never: not possible this type could happen
+    - void: used to tell TypeScript that a function returns undefined or no return value
+*/
+//syntaxes for building types: Interfaces and Types
 function hello() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -69,7 +87,8 @@ function test2() {
 test2();
 var lucky = 23;
 lucky = '23';
-var font = 'bold';
+var font1;
+var font2 = 'bold';
 //notice how now, font is only assignable to either bold, italic, or 23
 // font = 'something'
 //more often though, you’ll be strongly typing objects with multiple properties with different types
@@ -104,19 +123,6 @@ var arr = [];
 //The above is particularly useful when working with an array of objects and you want to ensure the objects you're working with are identical. 
 var arr2 = [];
 var arr4 = [];
-//Generics
-//generally used in situations when you want to use a Type interally inside of a class or function
-var Observable = /** @class */ (function () {
-    function Observable(value) {
-        this.value = value;
-    }
-    return Observable;
-}());
-//T represents a variable type that we can pass in to strong type the class's internal value
-//This allows us to specify the internal type at some later point in our code 
-var x;
-var y;
-var z = new Observable(23); //does the same as the above, but instead implicitly sets the internal type to a number.
 var Emoji = /** @class */ (function () {
     function Emoji(icon) {
         this.icon = icon;
@@ -278,3 +284,90 @@ var ts = new SuperHeroTest('TypeScript');
 console.log(ts);
 console.log(ts.sayHi());
 console.log(ts.superpower());
+var UserAccount = /** @class */ (function () {
+    function UserAccount(name, id) {
+        this.name = name;
+        this.id = id;
+    }
+    return UserAccount;
+}());
+var user = new UserAccount('Sean', 1);
+//example of a use case for unknown
+var jsonParserUnknown = function (jsonString) { return JSON.parse(jsonString); };
+var bird1 = { wings: 2 };
+var bird2 = { wings: 2 };
+//Types and interfaces can be intermixed
+var bird3 = bird1;
+var owl = {
+    wings: 2,
+    nocturnal: true
+};
+var chicken = {
+    wings: 2,
+    colorful: false,
+    flies: false
+};
+//notice how the below doesn't work
+//let windowOpen: WindowStates = 'broken'
+var windowOpen = 'open';
+//You can even use unions to handle different types. Imagine if you have a function that takes an array or a string as an argument. 
+//the function below takes an object as an argument who's type can either be a string or an array
+function getLength(obj) {
+    return obj.length;
+}
+//Generics
+//generally used in situations when you want to use a Type interally inside of a class or function. 
+//generics provide variables to types. 
+var Observable = /** @class */ (function () {
+    function Observable(value) {
+        this.value = value;
+    }
+    return Observable;
+}());
+//T represents a variable called type that we can pass in to strong type the class's internal value. This allows us to specify the internal type at some later point in our code 
+var x;
+var y;
+var z = new Observable(23); //does the same as the above, but instead implicitly sets the internal type to a number.
+// the above generic describes that the a StringArray type, is an Array whose values are strings. 
+//notice how the below don't work
+//const testObjectArray: ObjectWithNameArray = ["word"]
+//const testObjectArray: ObjectWithNameArray = [{name:23}]
+//But this does work
+var testObjectArray = [{ name: "james brown" }];
+//declare let's us declare backpack without initializing its value.
+//the below creates a variable called backpack whose type is an object with data.
+//This line is a shortcut to tell TypeScript there is a constant called `backpack`, and to not worry about where it came from.
+//why doesn't this line of code work? 
+//declare const backpack: Backpack<{data: number}>
+var backpack;
+var object = backpack.get();
+backpack.add({ data: 25 });
+console.log(object);
+//we can bypass the above by using the let keyword. the below creates a backpack2 variable whose class is a Backpack and type is a string?
+var backpack2;
+console.log(backpack.get());
+console.log(backpack2.add("Hello World"));
+//the below defines a function logPoint with parameter p whose type is a Point and console logs parameter p's properties
+function logPoint(p) {
+    console.log("".concat(p.x, ", ").concat(p.y));
+}
+var point = { x: 23, y: 24 };
+logPoint(point);
+//the above logs "23, 24"
+//Although point's type is never declared, typescript compares the shapes of Point and point in the type-check. Since they have the same shape, point's type is inferred to Point. 
+//What's more interesting is that shape-matching only requires a subset of the object's fields to match. See the example below
+var point2 = { x: 23, y: 24, z: 25 };
+logPoint(point2); //=> "23, 24"
+var point3 = { x: 23 };
+//logPoint(point3) // => doesn't work because point3 is missing property y. 
+//Classes also conform to ducktyping
+var PointClass = /** @class */ (function () {
+    //types are necessary in the constructor to strongly type the instances properties. without the types, the property types are inferred 
+    function PointClass(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+    return PointClass;
+}());
+var point4 = new PointClass("23", 24);
+logPoint(point4); //why does this work? 
