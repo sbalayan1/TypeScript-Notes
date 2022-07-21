@@ -298,8 +298,10 @@ class SuperHeroTest implements CanSayHi, HasSuperPower {
         this.heroName = `Super ${name}`;
     }
 
-    //in this case, we have two methods, sayHi() and superpower(), both of which return strings
+    //in this case, we have two methods, sayHi() and superpower(), both of which return strings.
+    //the functions below specify the methods on the class and the datatype of their returns
 
+    
     sayHi: () => string;
     superpower: () => string
 
@@ -436,7 +438,8 @@ myUserAccount.name
         }
     
     //Generics
-        //generally used in situations when you want to use a Type interally inside of a class or function
+        //generally used in situations when you want to use a Type interally inside of a class or function. 
+        //generics provide variables to types. 
 
         class Observable<T> {
             constructor(public value: T) {
@@ -444,11 +447,45 @@ myUserAccount.name
             }
         }
         
-        //T represents a variable type that we can pass in to strong type the class's internal value. This allows us to specify the internal type at some later point in our code 
+        //T represents a variable called type that we can pass in to strong type the class's internal value. This allows us to specify the internal type at some later point in our code 
 
         let x: Observable<number>;
         let y: Observable<Person>;
         let z = new Observable(23); //does the same as the above, but instead implicitly sets the internal type to a number.
 
+        //a common use for generics is with arrays. 
+
+        type StringArray = Array<string>
+        type NumArray = Array<number>
+        type ObjectWithNameArray = Array<{name: string}>
+        // the above generic describes that the a StringArray type, is an Array whose values are strings. 
+
+        //notice how the below don't work
+            //const testObjectArray: ObjectWithNameArray = ["word"]
+            //const testObjectArray: ObjectWithNameArray = [{name:23}]
+
+        //But this does work
+            const testObjectArray: ObjectWithNameArray = [{name:"james brown"}]
+
+        //You can also declare your own types that use generics
+
+            //the below creates a backpack type using an interface. An interface is used to enforce the types shape. The type variable let's us pass a type into an instance of the Backpack type and set the types of its properties
+
+        interface Backpack<Type> {
+            add: (obj: Type) => void;
+            get: () => void;
+        }
+
+        //declare let's us declare backpack without initializing its value.
+        //the below creates a variable called backpack whose type is an object with data.
+        declare const backpack: Backpack<{data: Backpack<number>}>
+
+        //we can bypass the above by using the let keyword. the below creates a backpack2 variable whose class is a Backpack and type is a string?
+        let backpack2: Backpack<string>
 
 
+        console.log(backpack.get())
+        console.log(backpack2.add("Hello World"))
+
+
+//Sturctural Type System
