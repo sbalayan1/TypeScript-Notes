@@ -1,11 +1,15 @@
 import * as _ from 'lodash'
 import { zipWith } from 'lodash'
 
+//A type is the concept of describing what values can be passed and what can't. While Javascript provides dynamic typing, running the code and seeing what happens, static typing can be used to make predictions about what is expected before it runs
+
+    //basically Typescript is a tool that helps us find bugs before our code runs by using static checking. Typescript is a static type checker.
 
 //static checking => checking for errors in code before running 
+
 //static type checking => determining what's an error and what's not based on the kinds of values being operated on
 
-//TypeScript checks a program for errors before execution, and does so based on the kinds of values, it’s a static type checker.
+//TypeScript checks a program for errors before execution, and does so based on the kinds of values. It’s a static type checker!
 //TypeScript is a typed superset of Javascript meaning Javascript syntax is legal in TS and adds rules about how different kinds of values can be used. for instance
 
     const obj = {
@@ -16,6 +20,45 @@ import { zipWith } from 'lodash'
     //console.log(obj.heigth) => results in a typeError. Not a syntax error
 
 //TypeScript’s type checker is designed to allow correct programs through while still catching as many common errors as possible. 
+
+//tsc, the TypeScript Compiler
+    //The typescript compiler is our typechecker!
+    //tsc outputs an identical js file if no type errors occur. tsc compiles or transforms our ts file into js.
+
+//Types for tooling
+    //While the type checker is great for catching bugs, it can also be used to prevent from making mistakes!
+
+    //the type checker has information we can use to check our work. It will tell us if we're accessing the right properties, suggest what properties we might want to use, and even provides error messages and code completion.
+
+//Emitting with errors
+    //The gist here is that TypeScript assumes we know better than TypeScript. So in situations when there are type errors, the compiler will still run and transpile ts code to js. In short, TypeScript doesn't get in our way.
+    //To stop this from happening, do the following => tsc --noEmitOnError index.js
+
+//Explicit Types
+    function greet(person: string, date: Date) {
+        console.log(`Hello, ${person}, today is ${date.toDateString()}`)
+    }
+
+    //here we added type annotations to person and date to describe what types of values greet() can be called with
+
+//Erased Types
+    //TypeScript cannot be run on any browsers or runtimes unmodified. Furthermore, type annotations aren't part of JavaScript so how do we run TypeScript?!
+    //The compiler does this for us by basically stripping out the type annotations and transforming our ts code into plain vanilla js. That way, we can run our ts code in a browser!
+
+//Downleveling
+    //TypeScript has the ability to rewrite code from newer versions of js like ES5 to older versions like ES3. This process of moving from a newer or “higher” version of ECMAScript down to an older or “lower” one is sometimes called downleveling.
+
+//Strictness
+    //use the strictness settings to determine how thorough we want TS to be. 
+    //generally the default setting is where tsc stays out of our way but we can adjust that using strictness.
+
+    //strict: true in the tsconfig.json turns them all on simultaneously but we can opt out individually
+
+    //noImplicitAny: issues an error on variables whose types are implictly inferred as any
+        //Sometimes, TS doesn't infer a type and falls back to any. This defeats the purpose of typescript and can also create problems.
+
+
+    //strictNullChecks: 
 
 //Primitive Data Types in JavaScript
 /*
