@@ -94,6 +94,76 @@ import { zipWith } from 'lodash'
     //even though parameter s does not have a type annotation, typescript uses the inferred type of the forEach function and the array to determine the type of s. 
 
 //Object Types
+    //any JavaScript value with properties
+    function printCord(pt: {x: number; y: number;}): void {
+        console.log(`The coordinate's x value is ${pt.x}`)
+        console.log(`The coordinate's x value is ${pt.y}`)
+    }
+
+    //here we define an object type with properties x and y, both number types. 
+
+    //optional properties => add ? after a property name to make it optional 
+
+        interface Person {
+            first: string;
+            last: string;
+            dob?: Date;
+        }
+
+
+        let personOptional: Person = {
+            first: "Sean",
+            last: "John"
+        }
+
+        //note that JavaScript returns undefined when you access properties that don't exist. When you read from optional properties, you have to check for undefined before using it. 
+
+        console.log("personOptional", personOptional.dob?.getDate)
+
+        //another example
+        function printName(obj: {first: string, last?: string}) {
+            //console.log(obj.last.toUpperCase()) => could crash if obj.last is not provided. notice how we get obj.last is possibly undefined.
+
+
+        }
+
+        printName({first:"sean"}) //notice this doesn't throw an error. 
+
+        //solution to the above
+        function printName2(obj: {first: string, last?:string}) {
+            console.log(obj.last?.toUpperCase())
+        }
+
+        printName2({first:"sean"})
+
+//Union Types
+    //union types are a means to combine types. These types are formed from two or more other types. The types within a union type are called union members
+
+    function printId(id: number | string| object) {
+        console.log(`Your ID is: ${id}`)
+    }
+
+    printId(23)
+    printId("string")
+    printId({id: 23})
+
+    //It's important to note that TypeScript only lets you use methods that are available to all union members. 
+
+    function printId2(ids: number[]|object) {
+        //console.log(ids.map(id => {}) => property map does not exist on type object
+    }
+
+    //To solve the above, we can 'narrow' the code. Narrowing occurs when TypeScript can deduce a more specific type for a value based on the structure of the code
+    
+    function printId3(id: number | string) {
+        if (typeof id === "string") {
+            console.log(id.toUpperCase())
+        } else {
+            console.log(id)
+        }
+    }
+
+    //Most importantly, Unions are composed using the intersection of its types' properties. Given two sets of properties, only the intersection of their properties applies to the union.
 
 
 //syntaxes for building types: Interfaces and Types

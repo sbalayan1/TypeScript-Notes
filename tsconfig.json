@@ -2,8 +2,8 @@
     "compilerOptions": {
         "target": "ES5",
         "lib": ["ESNext", "DOM"],
-        "strict": true,
-        "noImplicitAny": true,
+        "strict": false,
+        "noImplicitAny": false,
         "strictNullChecks": true
     }
 }

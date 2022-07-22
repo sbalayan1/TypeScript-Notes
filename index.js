@@ -50,7 +50,46 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
+//A type is the concept of describing what values can be passed and what can't. While Javascript provides dynamic typing, running the code and seeing what happens, static typing can be used to make predictions about what is expected before it runs
+//basically Typescript is a tool that helps us find bugs before our code runs by using static checking. Typescript is a static type checker.
+//static checking => checking for errors in code before running 
+//static type checking => determining what's an error and what's not based on the kinds of values being operated on
+//TypeScript checks a program for errors before execution, and does so based on the kinds of values. It’s a static type checker!
+//TypeScript is a typed superset of Javascript meaning Javascript syntax is legal in TS and adds rules about how different kinds of values can be used. for instance
+var obj = {
+    width: 25,
+    height: 30
+};
+//console.log(obj.heigth) => results in a typeError. Not a syntax error
+//TypeScript’s type checker is designed to allow correct programs through while still catching as many common errors as possible. 
+//tsc, the TypeScript Compiler
+//The typescript compiler is our typechecker!
+//tsc outputs an identical js file if no type errors occur. tsc compiles or transforms our ts file into js.
+//Types for tooling
+//While the type checker is great for catching bugs, it can also be used to prevent from making mistakes!
+//the type checker has information we can use to check our work. It will tell us if we're accessing the right properties, suggest what properties we might want to use, and even provides error messages and code completion.
+//Emitting with errors
+//The gist here is that TypeScript assumes we know better than TypeScript. So in situations when there are type errors, the compiler will still run and transpile ts code to js. In short, TypeScript doesn't get in our way.
+//To stop this from happening, do the following => tsc --noEmitOnError index.js
+//Explicit Types
+function greet(person, date) {
+    console.log("Hello, ".concat(person, ", today is ").concat(date.toDateString()));
+}
+//here we added type annotations to person and date to describe what types of values greet() can be called with
+//Erased Types
+//TypeScript cannot be run on any browsers or runtimes unmodified. Furthermore, type annotations aren't part of JavaScript so how do we run TypeScript?!
+//The compiler does this for us by basically stripping out the type annotations and transforming our ts code into plain vanilla js. That way, we can run our ts code in a browser!
+//Downleveling
+//TypeScript has the ability to rewrite code from newer versions of js like ES5 to older versions like ES3. This process of moving from a newer or “higher” version of ECMAScript down to an older or “lower” one is sometimes called downleveling.
+//Strictness
+//use the strictness settings to determine how thorough we want TS to be. 
+//generally the default setting is where tsc stays out of our way but we can adjust that using strictness.
+//strict: true in the tsconfig.json turns them all on simultaneously but we can opt out individually
+//noImplicitAny: issues an error on variables whose types are implictly inferred as any
+//Sometimes, TS doesn't infer a type and falls back to any. This defeats the purpose of typescript and can also create problems.
+//strictNullChecks: makes handling null and undefined more explicitly so that we don't have to worry about whether we forgot to handle null and undefined.
 //Primitive Data Types in JavaScript
 /*
     - String
@@ -63,11 +102,66 @@ Object.defineProperty(exports, "__esModule", { value: true });
 */
 //Data Types extended from TypeScript
 /*
+    - Arrays: string[], number[], Array<number>
     - any: allow anything
+        => typically used when you dont want a particular value to cause typechecking errors
+        => When we assign a value a type of any, all of its properties are typed any.
+        => using any basically disables all further type checking on a value.
+
     - unknown: ensures a type is declared
     - never: not possible this type could happen
     - void: used to tell TypeScript that a function returns undefined or no return value
 */
+//Contextual Typing
+//occurs when TypeScript is able to infer the types a function should have because of the context its used in
+var names = ["Alic", "Bob", "Eve"];
+//names.forEach(s => s.toUppercase()) => results in Property 'toUppercase' does not exist on type 'string'. Did you mean 'toUpperCase'?
+names.forEach(function (s) { return s.toUpperCase(); });
+//even though parameter s does not have a type annotation, typescript uses the inferred type of the forEach function and the array to determine the type of s. 
+//Object Types
+//any JavaScript value with properties
+function printCord(pt) {
+    console.log("The coordinate's x value is ".concat(pt.x));
+    console.log("The coordinate's x value is ".concat(pt.y));
+}
+var personOptional = {
+    first: "Sean",
+    last: "John"
+};
+//note that JavaScript returns undefined when you access properties that don't exist. When you read from optional properties, you have to check for undefined before using it. 
+console.log("personOptional", (_a = personOptional.dob) === null || _a === void 0 ? void 0 : _a.getDate);
+//another example
+function printName(obj) {
+    //console.log(obj.last.toUpperCase()) => could crash if obj.last is not provided. notice how we get obj.last is possibly undefined.
+}
+printName({ first: "sean" }); //notice this doesn't throw an error. 
+//solution to the above
+function printName2(obj) {
+    var _a;
+    console.log((_a = obj.last) === null || _a === void 0 ? void 0 : _a.toUpperCase());
+}
+printName2({ first: "sean" });
+//Union Types
+//union types are a means to combine types. These types are formed from two or more other types. The types within a union type are called union members
+function printId(id) {
+    console.log("Your ID is: ".concat(id));
+}
+printId(23);
+printId("string");
+printId({ id: 23 });
+//It's important to note that TypeScript only lets you use methods that are available to all union members. 
+function printId2(ids) {
+    //console.log(ids.map(id => {}) => property map does not exist on type object
+}
+//To solve the above, we can 'narrow' the code. Narrowing occurs when TypeScript can deduce a more specific type for a value based on the structure of the code
+function printId3(id) {
+    if (typeof id === "string") {
+        console.log(id.toUpperCase());
+    }
+    else {
+        console.log(id);
+    }
+}
 //syntaxes for building types: Interfaces and Types
 function hello() {
     return __awaiter(this, void 0, void 0, function () {
@@ -384,5 +478,3 @@ var point6 = { x: { name: "word" }, y: { name: "word" } };
 logPoint(point4); // => string, 24
 //it seems like the property's type at declaration in a class overrules a property's actual type. Note if we change x's type to a string in our PointClass, the logPoint function doesn't work because point4's shape does not match the Point interface.
 //it also seems like classes work differently from objects. notice how point5 works with logPoint but point6 does not.
-console.log(typeof (point4.x)); // => string
-console.log(typeof (point.x)); // => number
