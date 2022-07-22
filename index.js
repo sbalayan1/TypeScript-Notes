@@ -344,19 +344,19 @@ backpack2 = {
         return { data: 25 };
     }
 };
-var object = backpack.get();
-backpack.add({ data: 25 });
+var object = backpack2.get();
+backpack2.add({ data: 25 });
 console.log("Generic backpack2", object);
 var backpack3;
 backpack3 = {
     add: function () { return undefined; },
     get: function () { return "hello world"; }
 };
-console.log(backpack.get());
+console.log(backpack3.get());
 console.log("Generic backpack3", backpack3.add("Hello World"));
 //the below defines a function logPoint with parameter p whose type is a Point and console logs parameter p's properties
 function logPoint(p) {
-    console.log("".concat(p.x, ", ").concat(p.y));
+    console.log("".concat(typeof (p.x), ", ").concat(p.y));
 }
 var point = { x: 23, y: 24 };
 logPoint(point);
@@ -369,12 +369,20 @@ var point3 = { x: 23 };
 //logPoint(point3) // => doesn't work because point3 is missing property y. 
 //Classes also conform to ducktyping
 var PointClass = /** @class */ (function () {
-    //types are necessary in the constructor to strongly type the instances properties. without the types, the property types are inferred 
+    //types are necessary in the constructor to strongly type the instances properties. without the types, the property types are inferred and users can input any types on instantiation.
     function PointClass(x, y) {
         this.x = x;
         this.y = y;
     }
     return PointClass;
 }());
-var point4 = new PointClass("23", 24);
-logPoint(point4); //why does this work?
+//the below creates an instance of the PointClass that is an object with x and y as properties {x: "23", y: 24}. x is a string and y is a number.
+var point4 = new PointClass("word", 24);
+var point5 = new PointClass({ name: "word" }, { name: "word" });
+var point6 = { x: { name: "word" }, y: { name: "word" } };
+//why does this work?
+logPoint(point4); // => string, 24
+//it seems like the property's type at declaration in a class overrules a property's actual type. Note if we change x's type to a string in our PointClass, the logPoint function doesn't work because point4's shape does not match the Point interface.
+//it also seems like classes work differently from objects. notice how point5 works with logPoint but point6 does not.
+console.log(typeof (point4.x)); // => string
+console.log(typeof (point.x)); // => number

@@ -512,12 +512,12 @@ const jsonParserUnknown = (jsonString: string): unknown => JSON.parse(jsonString
     //the below defines a type whose properties are x and y. 
     interface Point {
         x: number;
-        y: number
+        y: number;
     }
 
     //the below defines a function logPoint with parameter p whose type is a Point and console logs parameter p's properties
     function logPoint(p: Point) {
-        console.log(`${p.x}, ${p.y}`)
+        console.log(`${typeof(p.x)}, ${p.y}`)
     }
 
     let point = {x: 23, y: 24}
@@ -532,22 +532,32 @@ const jsonParserUnknown = (jsonString: string): unknown => JSON.parse(jsonString
     logPoint(point2) //=> "23, 24"
 
     let point3 = {x:23}
+    
     //logPoint(point3) // => doesn't work because point3 is missing property y. 
 
 
     //Classes also conform to ducktyping
     class PointClass {
-        x;
+        //the below declares properties of a class.
+        //the type declarations here take presidence over the constructor inputs. If x is declared a number type, we cannot strongly type the x parameter in the constructor to a string.
+        x: number;
         y;
 
-        //types are necessary in the constructor to strongly type the instances properties. without the types, the property types are inferred 
+        //types are necessary in the constructor to strongly type the instances properties. without the types, the property types are inferred and users can input any types on instantiation.
         constructor(x, y) {
             this.x = x
             this.y = y
         }
     }
 
-    let point4 = new PointClass("23", 24)
-    logPoint(point4) //why does this work?
-    
-    
+    //the below creates an instance of the PointClass that is an object with x and y as properties {x: "23", y: 24}. x is a string and y is a number.
+    let point4 = new PointClass("word", 24)
+    let point5 = new PointClass({name: "word"}, {name: "word"})
+    let point6 = {x: {name:"word"}, y: {name:"word"} }
+
+        //why does this work?
+        logPoint(point4) // => string, 24
+            //it seems like the property's type at declaration in a class overrules a property's actual type. Note if we change x's type to a string in our PointClass, the logPoint function doesn't work because point4's shape does not match the Point interface.
+            //it also seems like classes work differently from objects. notice how point5 works with logPoint but point6 does not.
+
+
