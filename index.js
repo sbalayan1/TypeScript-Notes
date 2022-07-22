@@ -50,11 +50,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 //A type is the concept of describing what values can be passed and what can't. While Javascript provides dynamic typing, running the code and seeing what happens, static typing can be used to make predictions about what is expected before it runs
 //basically Typescript is a tool that helps us find bugs before our code runs by using static checking. Typescript is a static type checker.
-//static checking => checking for errors in code before running 
+//static checking 
+//=> checking for errors in code before running 
 //static type checking => determining what's an error and what's not based on the kinds of values being operated on
 //TypeScript checks a program for errors before execution, and does so based on the kinds of values. It’s a static type checker!
 //TypeScript is a typed superset of Javascript meaning Javascript syntax is legal in TS and adds rules about how different kinds of values can be used. for instance
@@ -118,50 +118,6 @@ var names = ["Alic", "Bob", "Eve"];
 //names.forEach(s => s.toUppercase()) => results in Property 'toUppercase' does not exist on type 'string'. Did you mean 'toUpperCase'?
 names.forEach(function (s) { return s.toUpperCase(); });
 //even though parameter s does not have a type annotation, typescript uses the inferred type of the forEach function and the array to determine the type of s. 
-//Object Types
-//any JavaScript value with properties
-function printCord(pt) {
-    console.log("The coordinate's x value is ".concat(pt.x));
-    console.log("The coordinate's x value is ".concat(pt.y));
-}
-var personOptional = {
-    first: "Sean",
-    last: "John"
-};
-//note that JavaScript returns undefined when you access properties that don't exist. When you read from optional properties, you have to check for undefined before using it. 
-console.log("personOptional", (_a = personOptional.dob) === null || _a === void 0 ? void 0 : _a.getDate);
-//another example
-function printName(obj) {
-    //console.log(obj.last.toUpperCase()) => could crash if obj.last is not provided. notice how we get obj.last is possibly undefined.
-}
-printName({ first: "sean" }); //notice this doesn't throw an error. 
-//solution to the above
-function printName2(obj) {
-    var _a;
-    console.log((_a = obj.last) === null || _a === void 0 ? void 0 : _a.toUpperCase());
-}
-printName2({ first: "sean" });
-//Union Types
-//union types are a means to combine types. These types are formed from two or more other types. The types within a union type are called union members
-function printId(id) {
-    console.log("Your ID is: ".concat(id));
-}
-printId(23);
-printId("string");
-printId({ id: 23 });
-//It's important to note that TypeScript only lets you use methods that are available to all union members. 
-function printId2(ids) {
-    //console.log(ids.map(id => {}) => property map does not exist on type object
-}
-//To solve the above, we can 'narrow' the code. Narrowing occurs when TypeScript can deduce a more specific type for a value based on the structure of the code
-function printId3(id) {
-    if (typeof id === "string") {
-        console.log(id.toUpperCase());
-    }
-    else {
-        console.log(id);
-    }
-}
 //syntaxes for building types: Interfaces and Types
 function hello() {
     return __awaiter(this, void 0, void 0, function () {

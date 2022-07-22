@@ -5,9 +5,9 @@ import { zipWith } from 'lodash'
 
     //basically Typescript is a tool that helps us find bugs before our code runs by using static checking. Typescript is a static type checker.
 
-//static checking => checking for errors in code before running 
-
-//static type checking => determining what's an error and what's not based on the kinds of values being operated on
+//static checking 
+    //=> checking for errors in code before running 
+    //static type checking => determining what's an error and what's not based on the kinds of values being operated on
 
 //TypeScript checks a program for errors before execution, and does so based on the kinds of values. It’s a static type checker!
 //TypeScript is a typed superset of Javascript meaning Javascript syntax is legal in TS and adds rules about how different kinds of values can be used. for instance
@@ -93,107 +93,15 @@ import { zipWith } from 'lodash'
     names.forEach(s => s.toUpperCase())
     //even though parameter s does not have a type annotation, typescript uses the inferred type of the forEach function and the array to determine the type of s. 
 
-//Object Types
-    //any JavaScript value with properties
-    function printCord(pt: {x: number; y: number;}): void {
-        console.log(`The coordinate's x value is ${pt.x}`)
-        console.log(`The coordinate's x value is ${pt.y}`)
-    }
-
-    //here we define an object type with properties x and y, both number types. 
-
-    //optional properties => add ? after a property name to make it optional 
-
-        interface Person {
-            first: string;
-            last: string;
-            dob?: Date;
-        }
-
-
-        let personOptional: Person = {
-            first: "Sean",
-            last: "John"
-        }
-
-        //note that JavaScript returns undefined when you access properties that don't exist. When you read from optional properties, you have to check for undefined before using it. 
-
-        console.log("personOptional", personOptional.dob?.getDate)
-
-        //another example
-        function printName(obj: {first: string, last?: string}) {
-            //console.log(obj.last.toUpperCase()) => could crash if obj.last is not provided. notice how we get obj.last is possibly undefined.
-
-
-        }
-
-        printName({first:"sean"}) //notice this doesn't throw an error. 
-
-        //solution to the above
-        function printName2(obj: {first: string, last?:string}) {
-            console.log(obj.last?.toUpperCase())
-        }
-
-        printName2({first:"sean"})
-
-//Union Types
-    //union types are a means to combine types. These types are formed from two or more other types. The types within a union type are called union members
-
-    function printId(id: number | string| object) {
-        console.log(`Your ID is: ${id}`)
-    }
-
-    printId(23)
-    printId("string")
-    printId({id: 23})
-
-    //It's important to note that TypeScript only lets you use methods that are available to all union members. 
-
-    function printId2(ids: number[]|object) {
-        //console.log(ids.map(id => {}) => property map does not exist on type object
-    }
-
-    //To solve the above, we can 'narrow' the code. Narrowing occurs when TypeScript can deduce a more specific type for a value based on the structure of the code
-    
-    function printId3(id: number | string) {
-        if (typeof id === "string") {
-            console.log(id.toUpperCase())
-        } else {
-            console.log(id)
-        }
-    }
-
-    //Most importantly, Unions are composed using the intersection of its types' properties. Given two sets of properties, only the intersection of their properties applies to the union.
-
 
 //syntaxes for building types: Interfaces and Types
 
-async function hello() {
-    return 'hello world'
-}
 
-async function test2() {
-    console.log('hello world')
-    return 'test2'
-}
-test2()
-
-let lucky: any = 23
-lucky = '23'
 
 
 //example of creating custom types
 type Style1 = string
 let font1: Style1;
-
-//the below is called a union type
-type Style2 = 'bold' | 'italic' | 23;
-let font2: Style2 = 'bold'
-
-//notice how now, font is only assignable to either bold, italic, or 23
-// font = 'something'
-
-//more often though, you’ll be strongly typing objects with multiple properties with different types
 
 // assume we have two objects whose shape has a first and last name with string types
 //composing objects or classes with incorrect shapes is an easy way to create bugs
