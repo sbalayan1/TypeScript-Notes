@@ -58,7 +58,7 @@ import { zipWith } from 'lodash'
         //Sometimes, TS doesn't infer a type and falls back to any. This defeats the purpose of typescript and can also create problems.
 
 
-    //strictNullChecks: 
+    //strictNullChecks: makes handling null and undefined more explicitly so that we don't have to worry about whether we forgot to handle null and undefined.
 
 //Primitive Data Types in JavaScript
 /*
@@ -72,11 +72,28 @@ import { zipWith } from 'lodash'
 */
 //Data Types extended from TypeScript
 /*
-    - any: allow anything
+    - Arrays: string[], number[], Array<number>
+    - any: allow anything 
+        => typically used when you dont want a particular value to cause typechecking errors
+        => When we assign a value a type of any, all of its properties are typed any.
+        => using any basically disables all further type checking on a value. 
+
     - unknown: ensures a type is declared
     - never: not possible this type could happen
     - void: used to tell TypeScript that a function returns undefined or no return value
 */
+
+
+//Contextual Typing
+    //occurs when TypeScript is able to infer the types a function should have because of the context its used in
+
+    const names = ["Alic", "Bob", "Eve"]
+    //names.forEach(s => s.toUppercase()) => results in Property 'toUppercase' does not exist on type 'string'. Did you mean 'toUpperCase'?
+
+    names.forEach(s => s.toUpperCase())
+    //even though parameter s does not have a type annotation, typescript uses the inferred type of the forEach function and the array to determine the type of s. 
+
+//Object Types
 
 
 //syntaxes for building types: Interfaces and Types
