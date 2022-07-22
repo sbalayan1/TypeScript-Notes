@@ -1,6 +1,22 @@
 import * as _ from 'lodash'
 import { zipWith } from 'lodash'
 
+
+//static checking => checking for errors in code before running 
+//static type checking => determining what's an error and what's not based on the kinds of values being operated on
+
+//TypeScript checks a program for errors before execution, and does so based on the kinds of values, it’s a static type checker.
+//TypeScript is a typed superset of Javascript meaning Javascript syntax is legal in TS and adds rules about how different kinds of values can be used. for instance
+
+    const obj = {
+        width: 25,
+        height: 30
+    }
+
+    //console.log(obj.heigth) => results in a typeError. Not a syntax error
+
+//TypeScript’s type checker is designed to allow correct programs through while still catching as many common errors as possible. 
+
 //Primitive Data Types in JavaScript
 /*
     - String
@@ -559,5 +575,3 @@ const jsonParserUnknown = (jsonString: string): unknown => JSON.parse(jsonString
         logPoint(point4) // => string, 24
             //it seems like the property's type at declaration in a class overrules a property's actual type. Note if we change x's type to a string in our PointClass, the logPoint function doesn't work because point4's shape does not match the Point interface.
             //it also seems like classes work differently from objects. notice how point5 works with logPoint but point6 does not.
-
-
