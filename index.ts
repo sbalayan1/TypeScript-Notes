@@ -24,6 +24,7 @@ import { zipWith } from 'lodash'
 //tsc, the TypeScript Compiler
     //The typescript compiler is our typechecker!
     //tsc outputs an identical js file if no type errors occur. tsc compiles or transforms our ts file into js.
+    //remember the compiler is just a typechecker. It takes a typescript file, checks for bugs/errors before exectution and transforms the file into js
 
 //Types for tooling
     //While the type checker is great for catching bugs, it can also be used to prevent from making mistakes!
@@ -118,21 +119,32 @@ const person2: Person = {
 
 //with typescript we can enforce shape of an object using an interface. 
 //if we know that the shape of an object will always be the same, then we can define interface that defines the types on each property
-//now we can use this interface to type the objects above directle, use it as an argument, use it as the return value for our function, or anywhere else in our code
+//now we can use this interface to type the objects above directly, use it as an argument, use it as the return value for our function, or anywhere else in our code
 
 interface Person {
     first: string;
     last: string
 }
 
-
 //sometimes an interface can be restrictive. however we can actually maintain the required properties and add additional properties by doing the below
 
 interface Person {
-    first: string;
-    last: string;
+    first: string,
+    last: string,
     [key: string]: any
 }
+
+    //note: if you create an interface with defined keys like first and last, when you initialize a variable, typed to that interface, those keys will be required. 
+    //example:
+        const person4: Person = {} //throws a Type '{}' is missing the following properties: first && last
+
+    //if you want to be able to set an object to an interface but not HAVE to initialize with all of the interfaces properties, use index signatures instead of predefining properties
+    //example:
+        interface FreePerson {
+            [key: string]: string
+        }
+
+        const person5: FreePerson = {}
 
 //strongly typed functions
 //what we've done below is explicitly strongly typed our arguments to number data types and our return to a string. This ensures that only numbers can be passed and our function only returns a string
@@ -160,21 +172,55 @@ const arr: number[] = []
 
 //The above is particularly useful when working with an array of objects and you want to ensure the objects you're working with are identical. 
 
-const arr2: Person[] = [] 
-
+const arr2: Person[] = []
+const person3: Person = {
+    first: "",
+    last: ""
+} 
+arr2.push('x') //this throws an error because 'x' is not of the Person type
+arr2.push(person3) //this doesn't throw an error because person3 is of the Person Type
 
 //tuples
 //tuples are fixed length arrays where each item has its own type
 
 type MyList = [number, string, boolean]
 
-//const arr3: MyList = []
-//the above throws an error because we are initializing as an empty array. The compiler expects all of the values to be defined upfront
-//to fix this, use the ?
-//The ? can be used in other places as well. For instance, you can use the ? syntax to make function arguments optional
+const arr3: MyList = [] //throws an error because we are initializing as an empty array. The compiler expects all of the values to be defined upfront. 
+
+//To fix this we can use something similar to index signatures. For tuples, we'll use the ? operator
+//The ? operator can be used in other places as well. 
 
 type MyList2 = [number?, string?, boolean?]
 const arr4: MyList2 = []
+
+//You can even use the ? operator on interfaces to make properties optional
+
+interface EmptyHash {
+    first?: any, //this basically says the first property will either be the any type or undefined type
+    last?: any,
+    [key: string]: string
+}
+
+const exampleHash: EmptyHash = {}
+
+//how can we type our interface so that when first and last name are defined, their types can only be string OR undefined?
+interface EmptyHash2 {
+    first: string | undefined
+    last?: string
+    [key: string] : string
+}
+
+//? operators can even be used in functions to make parameters optional. If you do use a ? operator, you cannot use a default value. It's one or the other
+function sum(num1: number, num2: number, num3?: number = 1): number {
+    console.log(num3)
+    return num1 + num2
+}
+
+// also note that if you use the ? operator on a parameter, you'll receive a warning when you use that parameter that it could possibly be null. Not sure if the compiler will stop execution
+function correct_sum(num1: number, num2: number, num3?: number): number {
+    console.log(num3)
+    return num1 + num2
+}
 
 
 
@@ -613,3 +659,11 @@ const jsonParserUnknown = (jsonString: string): unknown => JSON.parse(jsonString
         logPoint(point4) // => string, 24
             //it seems like the property's type at declaration in a class overrules a property's actual type. Note if we change x's type to a string in our PointClass, the logPoint function doesn't work because point4's shape does not match the Point interface.
             //it also seems like classes work differently from objects. notice how point5 works with logPoint but point6 does not.
+
+
+
+interface Point {
+    x: number;
+    y: number;
+}
+
