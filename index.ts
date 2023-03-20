@@ -233,13 +233,13 @@ class Emoji {
 const sun = new Emoji('😆')
 console.log(sun)
 
-var Emoji2 = (function() {
-    function Emoji2(value) {
-        this.value = value
-    }
+function Emoji2(value) {
+    this.value = value
+}
 
-    return Emoji
-}())
+const moon: Emoji = new Emoji('') //the example here showcases that we can also type variable to classes!
+const earth: Emoji2 = new Emoji('') //notice this breaks because we have typed earth to the Emoji2 class but instantiate a new Emoji
+const venus: Emoji2 = new Emoji2('') //you'll also notice that when using object constructors, we can instantiate a new instance of emoji2, but we CAN'T use the object constructor to type the variable. 
 
 class Emoji3 {
     //create a private property called previous
@@ -456,27 +456,62 @@ const jsonParserUnknown = (jsonString: string): unknown => JSON.parse(jsonString
 //Two main tools to declare shapes of an object: Interfaces and Types
 
     type Bird = {
-        wings: 2
+        wings: 2,
+        feet: number
     }
 
     interface BirdInterface {
         wings: 2
     }
 
-    const bird1: Bird = {wings: 2}
+    const bird1: Bird = {wings: 1, feet: 2} //since our Bird type's wings property is set to 2, we must set wings to 2. Note that if we were to set wings to a type instead, we could give our bird any number of wings
     const bird2: BirdInterface = {wings:2}
 
     //Types and interfaces can be intermixed
-    const bird3: BirdInterface = bird1
+    const bird3: BirdInterface = bird1 //here we set bird3's type to BirdInterface and assign its value to bird1 even though bird1 is of the Bird type. 
+
+    const bird4: Bird = bird2 //notice though that if you switch the roles, and set the variables type to Bird and the value to a Bird Interface, we get an error because bird4 is missing the feet property. It seems that we can intermix types and interfaces, however! we have to ensure that the value has all the required properties of the defined type. In this case, bird2 HAS the wings property, but it is missing the feet property. 
 
     //Both can also extend other interfaces and types. Types do this via intersection types. Interfaces have a keyword
 
-    type Owl = {nocturnal: true} & Bird
+    type Owl = {nocturnal: true} & Bird //here the Owl Type extends the Bird type. 
+
+    const barnOwl: Owl = {
+        nocturnal: true
+    } //as you can see, when we create a variable set to the Owl type, we not only need the Owl's properties, but also the Bird's properties because the Owl type is an EXTENSION of the Bird type
+
     type Robin = {nocturnal: false} & BirdInterface
+    //again this is another example of types extending types/interfaces. Here the Robin type is an EXTENSION of the BirdInterface. 
+
+    const robinBird: Robin = {
+        nocturnal: false,
+        wings: 2
+    }
+
+    //note the above are called intersection types. This is where TYPES extend types/interfaces. Oppositely, interfaces use the EXTENDS keyword to extend types/interfaces
 
     interface Peacock extends Bird {
-        colorful: true;
-        flies: false
+        colorful: boolean
+        flies: boolean
+        [key: string]: number
+    }
+
+    //the above is an example of an interface EXTENDING the Bird type. The above errs because if we use an index signature, all of the properties need to be of the same TYPE as the index signature. 
+
+    interface CorrectPeacock extends Bird {
+        colorful: boolean
+        flies: boolean
+        [key: string]: boolean | number //here we say any new properties will be either boolean or numbers. This is because the CorrectPeacock's properties, colorful and flies, are booleans and the Bird properties, wings and feet, are booleans and numbers
+    }
+
+    const peacock: CorrectPeacock = {
+        colorful: true,
+        flies: false,
+        wings: 2,
+        feet: 2,
+        other: 100,
+        broken: "Hello World" //this property breaks because it is neither a number or boolean
+        1: false //this breaks because the property is a number, not a string
     }
 
     interface Chicken extends BirdInterface {
@@ -667,3 +702,35 @@ interface Point {
     y: number;
 }
 
+//other notes
+    // tsc --noEmitOnError: if we hit an error, don't emit compiler output files. TLDR: don't create a js file if we hit errors. This defaults to false
+    // TypeScript has the ability to rewrite code from newer versions to older ones using downleveling. By default it targets ES3, though we can use the target option when running tsc to target a different version of JS
+        //example: tsc --target es2015
+    //the strict flag turns all stritcness flags on simultaneously. However the biggest ones we should know about are noImplicitAny and strictNullChecks
+
+    //noImplicitAny: true, raises an error on variables whose types are implicitly inferred as any
+    //strictNullChecks: true, when false, null and undefined are ignored. when true, null and undefined have their own types and you'll get a type error if you try to use them when a concrete value is expected
+        // ex:
+        const loggedInUsername: string
+        interface LoggedUser {
+            name: string
+            age: number
+        }
+
+        const users: LoggedUser[] = [
+            {name:"OBY", age: 12},
+            {name:"Heera", age: 32}
+        ]
+
+        const loggedInUser: LoggedUser | undefined = users.find(user => user.name === loggedInUsername)
+        console.log(loggedInUser.name) //notice loggedInUser could potentially be undefined which is why we get an error
+
+        console.log(loggedInUser.name + ',' + loggedInUser.age != null ? loggedInUser.age.toString() : 'age unknown')// doesn't work
+
+
+        if (loggedInUser.age != null){
+            console.log(`${loggedInUser.name}, ${loggedInUser.age.toString()}`)
+        }//doesn't work
+        
+        //to solve??????
+        console.log(loggedInUser!.name)
