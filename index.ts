@@ -728,9 +728,36 @@ interface Point {
         console.log(loggedInUser.name + ',' + loggedInUser.age != null ? loggedInUser.age.toString() : 'age unknown')// doesn't work
 
 
-        if (loggedInUser.age != null){
+        if (loggedInUser.age !== undefined){
             console.log(`${loggedInUser.name}, ${loggedInUser.age.toString()}`)
         }//doesn't work
         
-        //to solve??????
-        console.log(loggedInUser!.name)
+        //to solve you cna use the ! operator or even the ? operator. The below is called a NON NULL ASSERTION AND IT IS ONLY AVAILABLE IN TYPESCRIPT
+        console.log(loggedInUser!.name) //! is the bang operator
+            //under the hood it seems that we check if loggedInUser is null and console log the name if it is not null
+        console.log(loggedInUser?.name) //? is the ternary operator
+
+
+
+        
+
+        
+
+
+
+//Other Notes (4/3/23):
+    //There are other primitives available to you in the type system
+        //bigint - used to represent very large integers
+            const oneHundred: bigint = BigInt(100)
+            const twoThousand: bigint = 2000n
+            const brokenmillion: bigint = 3000000 //you need to either create an instance of BigInt or use n
+        //symbol
+            //symbols are primitives in JavaScript used to create globally unique references 
+            const firstName = Symbol("name")
+            const lastName = Symbol("name")
+            const numberSymbol = Symbol(5)
+            const anotherNum = Symbol(5)
+
+            if (firstName === lastName) {
+                //here we get an error. This comparison appears to be unintentional becase the types 'typeof FirstName' and 'typeof secondName' have no overlap.
+            }

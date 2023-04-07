@@ -1,10 +1,10 @@
-{
-    "compilerOptions": {
-        "target": "ES6",
-        "lib": ["ESNext", "DOM"],
-        "strict": false,
-        "noImplicitAny": false,
-        "strictNullChecks": true,
-        "jsx": "react"
-    }
-}
+// {
+//     "compilerOptions": {
+//         "target": "ES6",
+//         "lib": ["ESNext", "DOM"],
+//         "strict": false,
+//         "noImplicitAny": false,
+//         "strictNullChecks": true,
+//         "jsx": "react"
+//     }
+// }
